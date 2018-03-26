@@ -40,3 +40,7 @@ the time difference between the next tick and the current one.
 Having the possiblity to add an offest to counterbalance this effect is probably a good idea.
 
 1) We still need some ideas to control the system.
+
+## Current issues
+
+With Aubio, when the music has bridges without any kicks, the beat still goes on and trigger LEDs. If we want to avoid this effect, we'll have to put a low pass filter on the Aubio analyser or on the trigger or something like this.

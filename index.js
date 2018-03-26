@@ -1,5 +1,7 @@
 "use strict";
 
+const beats = require('./beats.js').beats;
+
 const mpd = require('mpd')
 const cmd = mpd.cmd
 
@@ -23,8 +25,15 @@ client.on('system', function(name) {
 client.on('system-player', function() {
 	client.sendCommand(cmd("status", []), function(err, msgStr) {
 		if (err) throw err
-		console.log(msgStr)
-		var msg = mpd.parseKeyValueMessage(msgStr)
+		// console.log(msgStr)
+		let status = mpd.parseKeyValueMessage(msgStr)
+
+		if (status.state === 'play') {
+			let elapsed = parseFloat(status.elapsed)
+			console.log("ELAPSED:", elapsed)
+			initTimeouts(elapsed)
+		}
+
 		/*
 		volume: 75
 		repeat: 0
@@ -48,3 +57,11 @@ client.on('system-player', function() {
 		*/
 	})
 })
+
+function initTimeouts(elapsed) {
+	for (let beat of beats) {
+		setTimeout(function() {
+			console.log("beat:", beat)
+		}, (beat - elapsed) * 1000)
+	}
+}
